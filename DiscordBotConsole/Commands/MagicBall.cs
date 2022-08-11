@@ -42,9 +42,9 @@ namespace DiscordBot.Commands
 
         public static async void Another(SocketUserMessage msg)
         {
-            string path = "~/another.PNG";// Windows @"E:\ALL\Programs\AllCs\Sharp\Projects\DiscordBot\DiscordBot\another.PNG";
+            string path = "another.PNG";// Windows @"E:\ALL\Programs\AllCs\Sharp\Projects\DiscordBot\DiscordBot\another.PNG";
 
-            Console.WriteLine($"Trying to send: {path}");
+            //Console.WriteLine($"Trying to send: {path}");
 
             await msg.Channel.SendFileAsync(path, $"{msg.Author.Mention}");
         }
