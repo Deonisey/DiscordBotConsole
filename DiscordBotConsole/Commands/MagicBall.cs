@@ -45,6 +45,7 @@ namespace DiscordBot.Commands
             string path = System.Reflection.Assembly.GetExecutingAssembly().Location;// @"E:\ALL\Programs\AllCs\Sharp\Projects\DiscordBot\DiscordBot\another.PNG";
             
             path = path.Remove(path.LastIndexOf("\\") + 1) + "another.PNG";
+            Console.WriteLine($"Trying to send: {path}");
 
             await msg.Channel.SendFileAsync(path, $"{msg.Author.Mention}");
         }
