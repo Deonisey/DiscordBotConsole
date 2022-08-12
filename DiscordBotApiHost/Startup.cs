@@ -1,12 +1,14 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.AspNetCore.Builder;
+using Newtonsoft.Json;
 
 namespace DiscordBotApiHost
 {
     public class Startup
     {
         public IConfiguration Configuration;
+
 
         public Startup()
         {
@@ -25,6 +27,12 @@ namespace DiscordBotApiHost
                 MessageCacheSize = 1000
             };
 
+            var json = File.ReadAllText(Directory.GetCurrentDirectory() + "\\data.json");
+
+            CmdBotConf? cmdBotConf;
+            cmdBotConf = JsonConvert.DeserializeObject<CmdBotConf>(json);
+            if (cmdBotConf == null) throw new Exception("Wrong json");
+
             // registering service descriptors
             services
                 .AddSingleton(Configuration)
@@ -33,7 +41,8 @@ namespace DiscordBotApiHost
                 .AddSingleton<DiscordSocketClient>()
                 .AddTransient<BaseCommandService>()
                 .AddTransient<CommandService>()
-                .AddSingleton<BotHostingService>();      
+                .AddSingleton<BotHostingService>()
+                .AddSingleton<CmdBotConf>(cmdBotConf);      
         }
 
         

@@ -11,25 +11,30 @@ namespace DiscordBotApiHost
         private readonly CommandService _commands;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<BaseCommandService> _logger;
+        private readonly CmdBotConf _botConf;
 
         public BaseCommandService(
-            DiscordSocketClient client, 
+            DiscordSocketClient client,
             CommandService commands,
             IServiceProvider serviceProvider,
-            ILogger<BaseCommandService> logger)
+            ILogger<BaseCommandService> logger,
+            CmdBotConf botConf)
         {
             _client = client;
             _commands = commands;
             _serviceProvider = serviceProvider;
             _logger = logger;
+            _botConf = botConf;
         }
 
         public async Task InstallCommandsAsync()
         {
             _client.MessageReceived += HandleCommandAsync;
 
-            await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
-                            services: null);
+            await _commands.AddModulesAsync(
+                assembly: Assembly.GetEntryAssembly(),
+                services: null
+                );
         }
 
         public async Task HandleCommandAsync(SocketMessage messageParam)
@@ -50,68 +55,56 @@ namespace DiscordBotApiHost
             // Create a WebSocket-based command context based on the message
             var context = new SocketCommandContext(_client, message);
 
-            try
-            {
-                await PrepareCommandContext(context, message, argPos);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-                throw;
-            }
-            
+            try { await PrepareCommandContext(context, message, argPos); }
+            catch (Exception e) { _logger.LogError(e.Message); }
 
             await _commands.ExecuteAsync(context, argPos, _serviceProvider);
         }
 
         private async Task PrepareCommandContext(SocketCommandContext commandContext, SocketUserMessage message, int argPos)
         {
-            switch (message.Content.Substring(argPos).Split()[0].ToLower())
+            CmdBot cmdBot = new CmdBot(_botConf);
+            try
             {
-                case "вопрос":
-                    CmdBot.AnswerMagicBall(message, argPos + 6);
-                    break;
+                switch (message.Content.Substring(argPos).Split()[0].ToLower())
+                {
+                    case "вопрос":
+                        cmdBot.AnswerMagicBall(message, argPos + 6);
+                        break;
 
-                case "wod":
-                case "вод":
-                    CmdBot.Wod(message);
-                    break;
+                    case string s when (s == "wod" || s == "вод"):
+                        cmdBot.Wod(message);
+                        break;
 
-                case "lvlup":
-                case "levelup":
-                case "лвлап":
-                case "левелап":
-                    CmdBot.Levelup(message);
-                    break;
+                    case string s when (
+                        s == "lvlup" || s == "levelup" ||
+                        s == "лвлап" || s == "левелап"):
+                        cmdBot.Levelup(message);
+                        break;
 
-                case "aura":
-                case "auras":
-                case "аура":
-                case "ауры":
-                    CmdBot.Auras(message);
-                    break;
+                    case string s when (
+                        s == "aura" || s == "auras" ||
+                        s == "аура" || s == "ауры"):
+                        cmdBot.Auras(message);
+                        break;
 
-                case "commands":
-                case "команды":
-                    CmdBot.CommandList(message);
-                    break;
+                    case string s when (s == "commands" || s == "команды"):
+                        cmdBot.CommandList(message);
+                        break;
 
-                case "roll":
-                case "ролл":
-                    CmdBot.Roll(message);
-                    break;
-                
-                case "another":
-                case "другое":
-                    CmdBot.Another(message);
-                    break;
+                    case string s when (s == "roll" || s == "ролл"):
+                        cmdBot.Roll(message);
+                        break;
 
-                case string s when (s == "1" || s == "2" || s == "3"):
-                    //select stuff to do from above in a single line
+                    case string s when (s == "another" || s == "другое"):
+                        cmdBot.Another(message);
+                        break;
 
-                    default:                    
-                    throw new ArgumentNullException("Command not found");
+                    default:
+                        throw new ArgumentNullException("Command not found");
+                }
             }
+            catch { }
         }
     }
 }
