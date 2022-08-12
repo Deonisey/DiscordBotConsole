@@ -6,7 +6,7 @@ namespace DiscordBotApiHost
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; set; }
+        public IConfiguration Configuration;
 
         public Startup()
         {
@@ -14,6 +14,7 @@ namespace DiscordBotApiHost
                 .AddJsonFile("appsettings.json");
 
             Configuration = builder.Build();
+            //Configuration.Bind(builder)
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -24,6 +25,7 @@ namespace DiscordBotApiHost
                 MessageCacheSize = 1000
             };
 
+            // registering service descriptors
             services
                 .AddSingleton(Configuration)
                 .AddLogging()
@@ -34,12 +36,13 @@ namespace DiscordBotApiHost
                 .AddSingleton<BotHostingService>();      
         }
 
+        
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {           
-            var hostingService = app.ApplicationServices.GetRequiredService<BotHostingService>();
+        {
+            // pattern locator
+            BotHostingService hostingService = app.ApplicationServices.GetRequiredService<BotHostingService>();
 
             await hostingService.StartAsync(CancellationToken.None);
-
             //for now this is unnecessary, but you can configure generic request processing pipeline here
         }
     }    
