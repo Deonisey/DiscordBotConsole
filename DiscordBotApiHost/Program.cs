@@ -1,3 +1,6 @@
+
+
+
 namespace DiscordBotApiHost
 {
     public class Program
@@ -9,14 +12,12 @@ namespace DiscordBotApiHost
 
         public static void CreateWebApplication(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            var startup = new Startup();
+            
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            Startup startup = new Startup();
+            WebApplication app = builder.Build();
 
             startup.ConfigureServices(builder.Services);
-
-            var app = builder.Build();
-
             startup.Configure(app, builder.Environment);
 
             app.Run();
