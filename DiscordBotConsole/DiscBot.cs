@@ -12,13 +12,10 @@ namespace DiscordBot
 
     internal class DiscBot : IDisposable
     {
-        private Task _botTask;
-        public Task BotTask { get { return _botTask; } }
-
         private DiscordSocketClient _client;
-        private CommandHandler _commHandler;
+        private CommandHandler? _commHandler;
 
-        CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        CancellationTokenSource _cancellationTokenSource;
         CancellationToken _ct;
 
         public Task Log(LogMessage msg)
@@ -29,6 +26,7 @@ namespace DiscordBot
 
         internal DiscBot()
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             _ct = _cancellationTokenSource.Token;
 
             if (_client == null)
@@ -36,34 +34,22 @@ namespace DiscordBot
                 _client = new DiscordSocketClient(new DiscordSocketConfig { MessageCacheSize = 1000 });
                 _client.Log += Log;
 
-                //  You can assign your bot token to a string, and pass that in to connect.
-                //  This is, however, insecure, particularly if you plan to have your code hosted in a public repository.
                 string token = File.ReadAllText("token");
 
-                // Some alternative options would be to keep your token in an Environment Variable or a standalone file.
-                // var token = Environment.GetEnvironmentVariable("NameOfYourEnvironmentVariable");
-                // var token = File.ReadAllText("token.txt");
-                // var token = JsonConvert.DeserializeObject<AConfigurationClass>(File.ReadAllText("config.json")).Token;
-
                 _client.LoginAsync(TokenType.Bot, token);
-            }
-
-            _botTask = StartBot();
-            //_botTask.Start();
+            }            
         }
 
         public async Task StartBot()
         {
-
             await _client.StartAsync();
             _commHandler = new CommandHandler(_client);
 
             await _commHandler.InstallCommandAsync();
-
             while (true)
             {
                 if (_ct.IsCancellationRequested)
-                    break; //_ct.ThrowIfCancellationRequested();
+                    _ct.ThrowIfCancellationRequested();
 
                 await Task.Delay(200);
             }
@@ -73,14 +59,11 @@ namespace DiscordBot
         {
             try
             {
-                if (_ct != null)
-                    _cancellationTokenSource.Cancel();
-                await _botTask;
+                _cancellationTokenSource.Cancel();
+                await _client.StopAsync();
             }
             catch { }
         }
-
-
 
         public void Dispose()
         {
