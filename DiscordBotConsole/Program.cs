@@ -15,7 +15,7 @@ namespace DisckordBotConsole
         {
             DiscBot _bot = new DiscBot();
 
-            await _bot.BotTask;
+            await _bot.StartBot();
         }
     }
 }
