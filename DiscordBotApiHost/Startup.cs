@@ -31,11 +31,15 @@ namespace DiscordBotApiHost
                 .AddSingleton<DiscordSocketClient>()
                 .AddTransient<BaseCommandService>()
                 .AddTransient<CommandService>()
-                .AddSingleton<BotHostingService>();                
+                .AddSingleton<BotHostingService>();      
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {           
+            var hostingService = app.ApplicationServices.GetRequiredService<BotHostingService>();
+
+            await hostingService.StartAsync(CancellationToken.None);
+
             //for now this is unnecessary, but you can configure generic request processing pipeline here
         }
     }    

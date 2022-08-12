@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace DiscordBotApiHost
 {
-    public class BaseCommandService
+    public class BaseCommandService : CommandService
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
@@ -28,7 +28,8 @@ namespace DiscordBotApiHost
         {
             _client.MessageReceived += HandleCommandAsync;
 
-            await _commands.AddModuleAsync<BaseCommandService>(_serviceProvider); //should work i dunno their DI configuration is weird
+            await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
+                            services: null);
         }
 
         public async Task HandleCommandAsync(SocketMessage messageParam)
