@@ -17,7 +17,7 @@ namespace DiscordBot.Commands
     /// вопрос - помогает принять решения (варианты ответа через запятую)
     /// another/другое - руинка
     /// </summary>
-    internal static class CmdBot
+    public static class CmdBot
     {
         public static async void CommandList(SocketUserMessage msg)
         {
@@ -115,7 +115,7 @@ namespace DiscordBot.Commands
             await msg.Channel.SendMessageAsync("https://cdn.discordapp.com/attachments/983726425599246386/983727005780545586/unknown.png");
         }
 
-        internal static async void Auras(SocketUserMessage msg)
+        public static async void Auras(SocketUserMessage msg)
         {
             await msg.Channel.SendMessageAsync("https://cdn.discordapp.com/attachments/983726425599246386/989212632827441222/unknown.png");
         }
