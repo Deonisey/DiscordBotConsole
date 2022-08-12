@@ -27,7 +27,7 @@ namespace DiscordBotApiHost
                 MessageCacheSize = 1000
             };
 
-            var json = File.ReadAllText(Directory.GetCurrentDirectory() + "\\data.json");
+            var json = File.ReadAllText(Directory.GetCurrentDirectory() + "/data.json");
 
             CmdBotConf? cmdBotConf;
             cmdBotConf = JsonConvert.DeserializeObject<CmdBotConf>(json);
