@@ -149,7 +149,7 @@ namespace DiscordBot.Commands
             }
 
             if (questions.Length < 4)
-                a = $"Так ты звал меня ради всего {questions.Length}, стульев?\n";
+                a = $"Так ты звал меня ради всего {questions.Length} стульев?\n";
             else
                 a = $"Огого, выбор аж из {questions.Length} стульев ?\n";
             a += $"Ну думаю тут и {list[random.Next(list.Count)]}";
