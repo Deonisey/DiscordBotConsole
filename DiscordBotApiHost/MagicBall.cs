@@ -53,9 +53,17 @@ namespace DiscordBot.Commands
             M = 10;
             S = M / 2 + 1;
 
-            string str = msg.Content.Substring(msg.Content.IndexOf(' ')).Trim().ToLower();
+            string str;
+
+            if ((msg.Content == null) || (msg.Content.Length == 0))
+            {
+                await msg.Channel.SendMessageAsync("(кол-во)d(граней) (сложн.) или (кол-во)д(граней) (сложн.). Пример \"2d6 4\"");
+                return;
+            }
+
             try
             {
+                str = msg.Content.Substring(msg.Content.IndexOf(' ')).Trim().ToLower();
                 ind = str.IndexOf(fnd);
                 if (ind == -1)
                 {
