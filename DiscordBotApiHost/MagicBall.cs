@@ -55,11 +55,7 @@ namespace DiscordBot.Commands
 
             string str;
 
-            if ((msg.Content == null) || (msg.Content.Length == 0))
-            {
-                await msg.Channel.SendMessageAsync("(кол-во)d(граней) (сложн.) или (кол-во)д(граней) (сложн.). Пример \"2d6 4\"");
-                return;
-            }
+            if ((msg.Content == null) || (msg.Content.Length == 0)) return;
 
             try
             {
@@ -89,7 +85,11 @@ namespace DiscordBot.Commands
                     }
                 }
             }
-            catch { return; }
+            catch
+            {
+                await msg.Channel.SendMessageAsync("(кол-во)d(граней) (сложн.) или (кол-во)д(граней) (сложн.). Пример \"2d6 4\"");
+                return;
+            }
 
             res = new List<int>();
             for (int i = 0; i < N; i++) res.Add(random.Next(M) + 1);
@@ -165,5 +165,8 @@ namespace DiscordBot.Commands
 
             await msg.Channel.SendMessageAsync(a);
         }
+
+        public async void Goose(SocketUserMessage msg) =>
+            await msg.Channel.SendMessageAsync(_cmdBotConf.Goose);
     }
 }

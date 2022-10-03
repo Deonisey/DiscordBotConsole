@@ -40,7 +40,7 @@ namespace DiscordBotApiHost
         public async Task HandleCommandAsync(SocketMessage messageParam)
         {
             // Don't process the command if it was a system message
-            var message = messageParam as SocketUserMessage;
+            SocketUserMessage? message = messageParam as SocketUserMessage;
             if (message == null) return;
 
             // Create a number to track where the prefix ends and the command begins
@@ -98,6 +98,10 @@ namespace DiscordBotApiHost
 
                     case string s when (s == "another" || s == "другое"):
                         cmdBot.Another(message);
+                        break;
+
+                    case string s when (s == "запускаем" || s == "goose" || s == "гусь"):
+                        cmdBot.Goose(message);
                         break;
 
                     default:

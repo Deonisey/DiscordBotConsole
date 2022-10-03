@@ -7,5 +7,6 @@
         public string Another { get; set; } = String.Empty;
         public string LevelUp { get; set; } = String.Empty;
         public string Auras { get; set; } = String.Empty;
+        public string Goose { get; set; } = String.Empty;
     }
 }
