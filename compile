@@ -1,0 +1,3 @@
+#!/bin/bash
+
+dotnet build DiscordBotConsole.sln -c Release
