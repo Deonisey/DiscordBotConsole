@@ -22,6 +22,7 @@ namespace DiscordBotApiHost
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            Console.WriteLine(_configuration.GetValue<string>("Token"));
             await _client.LoginAsync(TokenType.Bot, _configuration.GetValue<string>("Token")); //todo: configure appsettings
             await _client.StartAsync();
 
