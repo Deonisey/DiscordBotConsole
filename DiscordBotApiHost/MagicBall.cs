@@ -166,7 +166,19 @@ namespace DiscordBot.Commands
             await msg.Channel.SendMessageAsync(a);
         }
 
-        public async void Goose(SocketUserMessage msg) =>
+        public async void Goose(SocketUserMessage msg)
+        {
+            if(_cmdBotConf.Goose == null) 
+            {
+                msg.Channel.SendMessageAsync("Я потерял гуся(((");
+                return;   
+            }
+            if(_cmdBotConf.Goose = "")
+            {
+                msg.Channel.SendMessageAsync("Я потерял гуся(((");
+                return;   
+            }
             await msg.Channel.SendMessageAsync(_cmdBotConf.Goose);
+        }
     }
 }
