@@ -33,9 +33,7 @@ namespace DiscordBot
             {
                 _client = new DiscordSocketClient(new DiscordSocketConfig { MessageCacheSize = 1000 });
                 _client.Log += Log;
-                File.WriteAllTextAsync("WriteText.txt", "Token:\n");
                 string token = File.ReadAllText("token");
-                File.WriteAllTextAsync("WriteText.txt", token);
                 //Console.WriteLine($"Start with token: {token}");
                 _client.LoginAsync(TokenType.Bot, token);
             }
