@@ -35,7 +35,7 @@ namespace DiscordBot
                 _client.Log += Log;
 
                 string token = File.ReadAllText("token");
-
+                Console.WriteLine($"Start with token: {token}");
                 _client.LoginAsync(TokenType.Bot, token);
             }
         }
