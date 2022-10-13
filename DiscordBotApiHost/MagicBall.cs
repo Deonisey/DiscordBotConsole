@@ -173,7 +173,7 @@ namespace DiscordBot.Commands
                 msg.Channel.SendMessageAsync("Я потерял гуся(((");
                 return;   
             }
-            if(_cmdBotConf.Goose = "")
+            if(_cmdBotConf.Goose == "")
             {
                 msg.Channel.SendMessageAsync("Я потерял гуся(((");
                 return;   
