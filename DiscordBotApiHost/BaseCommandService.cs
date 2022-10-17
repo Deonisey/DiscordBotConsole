@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Commands;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 
 namespace DiscordBotApiHost
@@ -11,14 +12,14 @@ namespace DiscordBotApiHost
         private readonly CommandService _commands;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<BaseCommandService> _logger;
-        private readonly CmdBotConf _botConf;
+        private readonly IOptions<CmdBotConf> _botConf;
 
         public BaseCommandService(
             DiscordSocketClient client,
             CommandService commands,
             IServiceProvider serviceProvider,
             ILogger<BaseCommandService> logger,
-            CmdBotConf botConf)
+            IOptions<CmdBotConf> botConf)
         {
             _client = client;
             _commands = commands;

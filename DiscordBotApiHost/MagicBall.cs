@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBotApiHost;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace DiscordBot.Commands
@@ -21,21 +22,21 @@ namespace DiscordBot.Commands
     /// </summary>
     public class CmdBot
     {
-        private readonly CmdBotConf _cmdBotConf;
-        public CmdBot(CmdBotConf cmdBotConf)
+        private readonly IOptions<CmdBotConf> _cmdBotConf;
+        public CmdBot(IOptions<CmdBotConf> cmdBotConf)
         {
             _cmdBotConf = cmdBotConf;
         }
 
         public async void CommandList(SocketUserMessage msg) =>
-            await msg.Channel.SendMessageAsync(_cmdBotConf.Commands);
+            await msg.Channel.SendMessageAsync(_cmdBotConf.Value.Commands);
 
         public async void Wod(SocketUserMessage msg) =>
-            await msg.Channel.SendMessageAsync(_cmdBotConf.Wod);
+            await msg.Channel.SendMessageAsync(_cmdBotConf.Value.Wod);
 
         public async void Another(SocketUserMessage msg)
         {
-            try { await msg.Channel.SendMessageAsync($"{msg.Author.Mention}: {_cmdBotConf.Another}"); }
+            try { await msg.Channel.SendMessageAsync($"{msg.Author.Mention}: {_cmdBotConf.Value.Another}"); }
             catch { }
         }
 
@@ -109,10 +110,10 @@ namespace DiscordBot.Commands
         }
 
         public async void Levelup(SocketUserMessage msg) =>
-            await msg.Channel.SendMessageAsync(_cmdBotConf.LevelUp);
+            await msg.Channel.SendMessageAsync(_cmdBotConf.Value.LevelUp);
 
         public async void Auras(SocketUserMessage msg) =>
-            await msg.Channel.SendMessageAsync(_cmdBotConf.Auras);
+            await msg.Channel.SendMessageAsync(_cmdBotConf.Value.Auras);
 
         public async void AnswerMagicBall(SocketUserMessage msg, int argPos)
         {
@@ -167,6 +168,6 @@ namespace DiscordBot.Commands
         }
 
         public async void Goose(SocketUserMessage msg) =>
-            await msg.Channel.SendMessageAsync(_cmdBotConf.Goose);
+            await msg.Channel.SendMessageAsync(_cmdBotConf.Value.Goose);
     }
 }

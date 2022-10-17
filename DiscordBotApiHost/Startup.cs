@@ -27,11 +27,13 @@ namespace DiscordBotApiHost
                 MessageCacheSize = 1000
             };
 
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("data.json")
+                .Build();
+
             var json = File.ReadAllText(Directory.GetCurrentDirectory() + "/data.json");
 
-            CmdBotConf? cmdBotConf;
-            cmdBotConf = JsonConvert.DeserializeObject<CmdBotConf>(json);
-            if (cmdBotConf == null) throw new Exception("Wrong json");
+            services.Configure<CmdBotConf>(x => Configuration.GetSection(nameof(CmdBotConf)).Bind(x)); //вот эта хуйня по идее даст тебе возможность инжектировать этот класс через IOptions, я только хз насчет пустых строк в конфиге по умолчанию, имо лучше ловить на месте нуллы
 
             // registering service descriptors
             services
@@ -41,8 +43,7 @@ namespace DiscordBotApiHost
                 .AddSingleton<DiscordSocketClient>()
                 .AddTransient<BaseCommandService>()
                 .AddTransient<CommandService>()
-                .AddSingleton<BotHostingService>()
-                .AddSingleton<CmdBotConf>(cmdBotConf);      
+                .AddSingleton<BotHostingService>();                
         }
 
         
